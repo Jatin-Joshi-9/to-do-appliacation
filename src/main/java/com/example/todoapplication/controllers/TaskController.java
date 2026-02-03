@@ -23,7 +23,7 @@ public class TaskController {
 
     // Example query: /tasks?status=PENDING&priority=LOW
     @GetMapping
-    public List<Task> getAllTasks(
+    public List<Task> getTasks(
             @RequestParam(required = false) Status status,
             @RequestParam(required = false) Priority priority
     ){
