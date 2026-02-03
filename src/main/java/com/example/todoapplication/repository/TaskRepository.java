@@ -12,9 +12,11 @@ import java.util.UUID;
 @Repository
 public class TaskRepository {
 
-    private List<Task> taskList = new ArrayList<>();
+    private Map<String,Task> taskMap = new HashMap<>();
+
     public Task save(Task task) {
-        taskList.add(task);
+
+        taskMap.put(task.getId(), task);
         return task;
     }
 }
