@@ -35,4 +35,7 @@ public class Task {
         this.title = title;
         this.updatedAt = LocalDateTime.now();
     }
+
+    public String getDescription() {
+        return description;
 }
