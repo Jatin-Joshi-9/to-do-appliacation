@@ -25,4 +25,7 @@ public class TaskRepository {
     public Optional<Task> findById(String id) {
         return Optional.ofNullable(taskMap.get(id));
     }
+    public void deleteById(String id){
+        taskMap.remove(id);
+    }
 }
