@@ -65,4 +65,8 @@ public class Task {
         return createdAt;
     }
 
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
 }
