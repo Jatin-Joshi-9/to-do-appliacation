@@ -61,4 +61,8 @@ public class Task {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
 }
