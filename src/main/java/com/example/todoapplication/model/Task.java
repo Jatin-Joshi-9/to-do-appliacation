@@ -52,4 +52,8 @@ public class Task {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public Priority getPriority() {
+        return priority;
+    }
+
 }
