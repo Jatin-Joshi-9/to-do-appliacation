@@ -19,4 +19,7 @@ public class TaskRepository {
         taskMap.put(task.getId(), task);
         return task;
     }
+    public List<Task> findAll() {
+        return new ArrayList<>(taskMap.values());
+    }
 }
