@@ -37,3 +37,8 @@ Each task must include:
 - Clear separation of concerns (controllers, services, repositories, models)
 - Clean, well-documented code
 - oop principles implementation
+
+
+### implementation steps
+1. Set up Spring Boot project with Maven. (completed)
+2. Define Task model with required fields. (completed)
