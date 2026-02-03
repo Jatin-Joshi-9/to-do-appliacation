@@ -28,4 +28,7 @@ public class TaskRepository {
     public void deleteById(String id){
         taskMap.remove(id);
     }
+    public boolean isExistsById(String id){
+        return taskMap.containsKey(id);
+    }
 }
