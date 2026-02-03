@@ -47,4 +47,9 @@ public class Task {
     public Status getStatus() {
         return status;
     }
+    public void setStatus(Status status) {
+        this.status = status;
+        this.updatedAt = LocalDateTime.now();
+    }
+
 }
