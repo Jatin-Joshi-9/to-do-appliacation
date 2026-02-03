@@ -23,5 +23,7 @@ public class Task {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
-
+    public String getId() {
+        return id;
+    }
 }
