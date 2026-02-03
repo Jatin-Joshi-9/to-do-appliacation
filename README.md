@@ -42,3 +42,4 @@ Each task must include:
 ### implementation steps
 1. Set up Spring Boot project with Maven. (completed)
 2. Define Task model with required fields. (completed)
+3. Implement in-memory storage (Repository) for tasks. (completed) 
