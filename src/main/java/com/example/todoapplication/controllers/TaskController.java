@@ -27,6 +27,6 @@ public class TaskController {
             @RequestParam(required = false) Status status,
             @RequestParam(required = false) Priority priority
     ){
-        return taskService.getAllTasks(status, priority);
+        return taskService.getFilteredTasks(status, priority);
     }
 }

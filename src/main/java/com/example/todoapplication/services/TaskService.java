@@ -17,7 +17,7 @@ public class TaskService {
     private final Map<Long, Task> tasks = new HashMap<>();
     private Long nextId = 1L;
 
-    public List<Task> getAllTasks(Status status, Priority priority){
+    public List<Task> getFilteredTasks(Status status, Priority priority){
 
         // Dummy data
         Task t1 = new Task("test", "test", Priority.LOW);
