@@ -22,4 +22,7 @@ public class TaskRepository {
     public List<Task> findAll() {
         return new ArrayList<>(taskMap.values());
     }
+    public Optional<Task> findById(String id) {
+        return Optional.ofNullable(taskMap.get(id));
+    }
 }
