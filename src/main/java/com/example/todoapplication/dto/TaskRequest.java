@@ -21,6 +21,9 @@ public class TaskRequest {
     @NotNull(message = "Priority is required")
     private Priority priority;
 
-    // Getters and Setters
+    public String getTitle() {
+        return title;
+    }
+
 
 }
