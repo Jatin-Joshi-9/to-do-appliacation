@@ -39,4 +39,12 @@ public class TaskService {
                 .filter(task -> priority == null || task.getPriority() == priority)
                 .collect(Collectors.toList());
     }
+    public Task getTaskById(String id) {
+        Task task = taskRepository.findById(id);
+        if (task == null) {
+            throw new IllegalArgumentException("Task not found with id: " + id);
+        }
+        return task;
+    }
+
 }
