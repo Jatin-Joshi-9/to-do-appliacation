@@ -145,7 +145,7 @@ To retrieve all tasks, send a GET request. You can use optional query parameters
 - Open Postman.
 - Create a new request.
 - Method: GET
-- URL: `http://localhost:8080/v1/api/task`
+- URL: `http://localhost:8080/v1/api/tasks`
 
 **Expected Success Response (200 OK):**
 
@@ -183,7 +183,7 @@ To retrieve all tasks, send a GET request. You can use optional query parameters
 
 #### Case 2: Filter by Status
 
-- URL: `http://localhost:8080/v1/api/task?status=PENDING`
+- URL: `http://localhost:8080/v1/api/tasks?status=PENDING`
 
 **Expected Response (200 OK):**
 
@@ -203,7 +203,7 @@ To retrieve all tasks, send a GET request. You can use optional query parameters
 
 #### Case 3: Filter by Priority
 
-- URL: `http://localhost:8080/v1/api/task?priority=HIGH`
+- URL: `http://localhost:8080/v1/api/tasks?priority=HIGH`
 
 **Expected Response (200 OK):**
 
@@ -223,7 +223,7 @@ To retrieve all tasks, send a GET request. You can use optional query parameters
 
 #### Case 4: Filter by Status AND Priority
 
-- URL: `http://localhost:8080/v1/api/task?status=IN_PROGRESS&priority=MEDIUM`
+- URL: `http://localhost:8080/v1/api/tasks?status=IN_PROGRESS&priority=MEDIUM`
 
 **Expected Response (200 OK):**
 
@@ -243,7 +243,7 @@ To retrieve all tasks, send a GET request. You can use optional query parameters
 
 #### Scenario 5: No Matching Results
 
-- URL: `http://localhost:8080/v1/api/task?status=COMPLETED&priority=HIGH`
+- URL: `http://localhost:8080/v1/api/tasks?status=COMPLETED&priority=HIGH`
 
 **Expected Response (200 OK):**
 
