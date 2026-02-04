@@ -104,6 +104,20 @@ Expected Failure \(Duplicate Title\):
 
 Plaintext:
 
+
+Duplicate Task Failure
+Send the same request twice
 ```
-Error: Task with title 'your custom titles' already exists.
+Result: 500 Internal Server Error
+
+Logs show IllegalArgumentException
+Validation Failure
+Send empty title:
+{
+  "title": "",
+  "description": "Desc",
+  "priority": "HIGH"
+}
+Result: 400 Bad Request
+
 ```
