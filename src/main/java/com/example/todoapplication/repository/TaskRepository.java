@@ -12,7 +12,10 @@ import java.util.Map;
 @Repository
 public class  TaskRepository {
     private final Map<String, Task> taskMapByID = new HashMap<>();
-
+    public Task save(Task task) {
+        taskMapByID.put(task.getId(), task);
+        return task;
+    }
 
 
 }
