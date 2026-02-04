@@ -46,5 +46,51 @@ public class TaskService {
         }
         return task;
     }
+    public Task update(String id, TaskRequest request) {
+        Task existingTask = taskRepository.findById(id);
+
+        if (existingTask == null) {
+            throw new IllegalArgumentException("Task not found with id: " + id);
+        }
+
+        if ((request.getTitle() == null || request.getTitle().isBlank()) &&
+                request.getDescription() == null &&
+                request.getPriority() == null &&
+                request.getStatus() == null) {
+            throw new IllegalArgumentException("At least one field (title, description, status, or priority) should    be updated");
+        }
+
+        boolean changeStatus = false;
+
+        if (request.getTitle() != null && !request.getTitle().isBlank()) {
+            String newTitle = request.getTitle().trim().replaceAll("\\s+", " ");
+            if (!existingTask.getTitle().equalsIgnoreCase(newTitle) && taskRepository.isExistsByTitle(newTitle)) {
+                throw new IllegalArgumentException("Task with the same title already exists");
+            }
+            existingTask.setTitle(newTitle);
+            changeStatus = true;
+        }
+
+        if (request.getDescription() != null) {
+            existingTask.setDescription(request.getDescription().trim());
+            changeStatus = true;
+        }
+
+        if (request.getPriority() != null) {
+            existingTask.setPriority(request.getPriority());
+            changeStatus = true;
+        }
+
+        if (request.getStatus() != null) {
+            existingTask.setStatus(request.getStatus());
+            changeStatus = true;
+        }
+
+        if (changeStatus){
+            existingTask.setUpdatedAt();
+        }
+
+        return taskRepository.save(existingTask);
+    }
 
 }
