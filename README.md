@@ -58,6 +58,8 @@ Retrieve all tasks with optional filtering capabilities.
 - **Empty Response Handling:** Returns an empty list if no tasks match the specified criteria.
 
 
+-**Note**: The status and priority filtering is case-sensitive.
+
 ### Run the Application
 You need to get the code and start the backend server first , should have java installed, with maven. 
 
