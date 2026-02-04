@@ -30,5 +30,8 @@ public class TaskRequest {
     public Status getStatus() {
         return status;
     }
+    public Priority getPriority() {
+        return priority;
+    }
 
 }
