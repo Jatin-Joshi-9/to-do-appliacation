@@ -2,9 +2,13 @@ package com.example.todoapplication.service;
 
 import com.example.todoapplication.dto.TaskRequest;
 import com.example.todoapplication.model.Priority;
+import com.example.todoapplication.model.Status;
 import com.example.todoapplication.model.Task;
 import com.example.todoapplication.repository.TaskRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
@@ -28,5 +32,11 @@ public class TaskService {
 
 
         return taskRepository.save(task);
+    }
+    public List<Task> getAllTasks(Status status, Priority priority) {
+        return taskRepository.findAll().stream()
+                .filter(task -> status == null || task.getStatus() == status)
+                .filter(task -> priority == null || task.getPriority() == priority)
+                .collect(Collectors.toList());
     }
 }
