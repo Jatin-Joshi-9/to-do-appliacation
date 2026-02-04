@@ -27,5 +27,8 @@ public class TaskRequest {
     public String getDescription() {
         return description;
     }
+    public Status getStatus() {
+        return status;
+    }
 
 }
