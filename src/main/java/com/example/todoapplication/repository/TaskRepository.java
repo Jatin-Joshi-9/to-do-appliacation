@@ -24,4 +24,7 @@ public class  TaskRepository {
         return taskMapByID.values().stream()
                 .anyMatch(task -> task.getTitle().equalsIgnoreCase(finalTitle));
     }
+    public List<Task> findAll() {
+        return new ArrayList<>(taskMapByID.values());
+    }
 }
