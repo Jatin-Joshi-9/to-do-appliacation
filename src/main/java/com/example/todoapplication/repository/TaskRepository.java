@@ -17,5 +17,11 @@ public class  TaskRepository {
         return task;
     }
 
-
+    public boolean isExistsByTitle(String title) {
+        title = title.trim();
+        title= title.replaceAll("\\s+", "");
+        String finalTitle = title;
+        return taskMapByID.values().stream()
+                .anyMatch(task -> task.getTitle().equalsIgnoreCase(finalTitle));
+    }
 }
