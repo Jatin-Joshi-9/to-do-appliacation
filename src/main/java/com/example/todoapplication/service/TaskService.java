@@ -47,11 +47,7 @@ public class TaskService {
         return task;
     }
     public Task update(String id, TaskRequest request) {
-        Task existingTask = taskRepository.findById(id);
-
-        if (existingTask == null) {
-            throw new IllegalArgumentException("Task not found with id: " + id);
-        }
+        Task existingTask = getTaskById(id);
 
         if ((request.getTitle() == null || request.getTitle().isBlank()) &&
                 request.getDescription() == null &&
