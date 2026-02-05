@@ -47,13 +47,21 @@ public class TaskController {
         return taskService.update(id, request);
     }
 
-
     @ExceptionHandler(value = DuplicateTitleException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public Map<String, Object> handleDuplicateTitleException(DuplicateTitleException exception) {
         Map<String, Object> response = new HashMap<>();
         response.put("status", HttpStatus.CONFLICT.value());
         response.put("message", exception.getMessage());
+        response.put("details", Map.of());
+        return response;
+    }
+    @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public Map<String, Object> handleMethodNotAllowedException(HttpRequestMethodNotSupportedException exception) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.METHOD_NOT_ALLOWED.value());
+        response.put("message", "Method not allowed");
         response.put("details", Map.of());
         return response;
     }
