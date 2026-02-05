@@ -1,5 +1,7 @@
 package com.example.todoapplication.service;
 
+import com.example.todoapplication.model.Priority;
+
 import com.example.todoapplication.model.Status;
 
 public class ValidationService {
@@ -12,5 +14,8 @@ public class ValidationService {
     public static boolean isValidStatus(Status status) {
         return status == null || status.equals(Status.PENDING) || status.equals(Status.IN_PROGRESS) || status.equals(Status.COMPLETED);
     }
-    
+    public static boolean isValidPriority(Priority priority) {
+        return priority == null || priority.equals(Priority.LOW) || priority.equals(Priority.MEDIUM) || priority.equals(Priority.HIGH);
+    }
+
 }
