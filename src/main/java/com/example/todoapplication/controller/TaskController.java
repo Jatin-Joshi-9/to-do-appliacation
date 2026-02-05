@@ -84,4 +84,31 @@ public class TaskController {
         response.put("details", Map.of());
         return response;
     }
+
+
+
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleValidationException(MethodArgumentNotValidException exception) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.BAD_REQUEST.value());
+        response.put("message", "Invalid request body");
+        List<String> fieldErrors = exception.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .toList();
+        response.put("details", Map.of("fieldErrors", fieldErrors));
+        return response;
+    }
+
+    @ExceptionHandler(value = NoResourceFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, Object> handleNoResourceFoundException(NoResourceFoundException exception) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.NOT_FOUND.value());
+        response.put("message", "Resource not found");
+        response.put("details", Map.of());
+        return response;
+    }
 }
