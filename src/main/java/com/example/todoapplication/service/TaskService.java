@@ -46,13 +46,14 @@ public class TaskService {
         }
         return task;
     }
+    
     public Task update(String id, TaskRequest request) {
         Task existingTask = getTaskById(id);
         boolean updated = false;
 
-        if (request.getTitle() != null && !request.getTitle().isBlank()) {
+        if (request.getTitle() != null && !request.getTitle().isBlank() && !request.getTitle().isEmpty() && request.getTitle().trim().length() <= 100) {
             String newTitle = request.getTitle().trim().replaceAll("\\s+", " ");
-            if (!existingTask.getTitle().equals(newTitle)) { 
+            if (!existingTask.getTitle().equalsIgnoreCase(newTitle)) { 
                 if (taskRepository.isExistsByTitle(newTitle)) {
                     throw new IllegalArgumentException("Task with the same title already exists");
                 }
@@ -61,15 +62,15 @@ public class TaskService {
             }
         }
 
-        if (request.getDescription() != null) {
+        if (request.getDescription() != null && request.getDescription().trim().length() <= 500 && !request.getDescription().isBlank() && !request.getDescription().isEmpty()) {
             String newDesc = request.getDescription().trim();
-            if (!newDesc.equals(existingTask.getDescription())) { 
+            if (!newDesc.equalsIgnoreCase(existingTask.getDescription())) { 
                 existingTask.setDescription(newDesc);
                 updated = true;
             }
         }
 
-        if (request.getPriority() != null && !request.getPriority().equals(existingTask.getPriority())) {
+        if (request.getPriority() != null && !request.getPriority().equals(existingTask.getPriority()) ) {
             existingTask.setPriority(request.getPriority());
             updated = true;
         }
@@ -83,8 +84,10 @@ public class TaskService {
             existingTask.setUpdatedAt();
             return taskRepository.save(existingTask);
         }
-
-        return existingTask; 
+        else{
+            throw new IllegalArgumentException("Already up to date fields provided");
+        }
+         
     }
 
 }
