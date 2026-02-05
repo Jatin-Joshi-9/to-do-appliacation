@@ -65,5 +65,14 @@ public class TaskController {
         response.put("details", Map.of());
         return response;
     }
+    @ExceptionHandler(value = TaskIdNotExistException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, Object> handleGenericException(TaskIdNotExistException exception) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.NOT_FOUND.value());
+        response.put("message", exception.getMessage());
+        response.put("details", Map.of());
+        return response;
+    }
 
 }
