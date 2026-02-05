@@ -56,7 +56,7 @@ public class TaskService {
             throw new IllegalArgumentException("At least one field (title, description, status, or priority) should    be updated");
         }
 
-        boolean changeStatus = false;
+        boolean updated = false;
 
         if (request.getTitle() != null && !request.getTitle().isBlank()) {
             String newTitle = request.getTitle().trim().replaceAll("\\s+", " ");
@@ -64,25 +64,25 @@ public class TaskService {
                 throw new IllegalArgumentException("Task with the same title already exists");
             }
             existingTask.setTitle(newTitle);
-            changeStatus = true;
+            updated = true;
         }
 
         if (request.getDescription() != null) {
             existingTask.setDescription(request.getDescription().trim());
-            changeStatus = true;
+            updated = true;
         }
 
         if (request.getPriority() != null) {
             existingTask.setPriority(request.getPriority());
-            changeStatus = true;
+            updated = true;
         }
 
         if (request.getStatus() != null) {
             existingTask.setStatus(request.getStatus());
-            changeStatus = true;
+            updated = true;
         }
 
-        if (changeStatus){
+        if (updated){
             existingTask.setUpdatedAt();
         }
 
