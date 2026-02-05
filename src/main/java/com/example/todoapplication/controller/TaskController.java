@@ -75,4 +75,13 @@ public class TaskController {
         return response;
     }
 
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.BAD_REQUEST.value());
+        response.put("message", "Invalid request body");
+        response.put("details", Map.of());
+        return response;
+    }
 }
