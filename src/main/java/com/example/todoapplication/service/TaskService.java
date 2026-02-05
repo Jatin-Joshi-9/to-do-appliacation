@@ -48,45 +48,43 @@ public class TaskService {
     }
     public Task update(String id, TaskRequest request) {
         Task existingTask = getTaskById(id);
-
-        if ((request.getTitle() == null || request.getTitle().isBlank()) &&
-                request.getDescription() == null &&
-                request.getPriority() == null &&
-                request.getStatus() == null) {
-            throw new IllegalArgumentException("At least one field (title, description, status, or priority) should    be updated");
-        }
-
         boolean updated = false;
 
         if (request.getTitle() != null && !request.getTitle().isBlank()) {
             String newTitle = request.getTitle().trim().replaceAll("\\s+", " ");
-            if (!existingTask.getTitle().equalsIgnoreCase(newTitle) && taskRepository.isExistsByTitle(newTitle)) {
-                throw new IllegalArgumentException("Task with the same title already exists");
+            if (!existingTask.getTitle().equals(newTitle)) { 
+                if (taskRepository.isExistsByTitle(newTitle)) {
+                    throw new IllegalArgumentException("Task with the same title already exists");
+                }
+                existingTask.setTitle(newTitle);
+                updated = true;
             }
-            existingTask.setTitle(newTitle);
-            updated = true;
         }
 
         if (request.getDescription() != null) {
-            existingTask.setDescription(request.getDescription().trim());
-            updated = true;
+            String newDesc = request.getDescription().trim();
+            if (!newDesc.equals(existingTask.getDescription())) { 
+                existingTask.setDescription(newDesc);
+                updated = true;
+            }
         }
 
-        if (request.getPriority() != null) {
+        if (request.getPriority() != null && !request.getPriority().equals(existingTask.getPriority())) {
             existingTask.setPriority(request.getPriority());
             updated = true;
         }
 
-        if (request.getStatus() != null) {
+        if (request.getStatus() != null && !request.getStatus().equals(existingTask.getStatus())) {
             existingTask.setStatus(request.getStatus());
             updated = true;
         }
 
-        if (updated){
+        if (updated) {
             existingTask.setUpdatedAt();
+            return taskRepository.save(existingTask);
         }
 
-        return taskRepository.save(existingTask);
+        return existingTask; 
     }
 
 }

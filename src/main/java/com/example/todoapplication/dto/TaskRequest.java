@@ -3,7 +3,6 @@ package com.example.todoapplication.dto;
 import com.example.todoapplication.model.Priority;
 import com.example.todoapplication.model.Status;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
