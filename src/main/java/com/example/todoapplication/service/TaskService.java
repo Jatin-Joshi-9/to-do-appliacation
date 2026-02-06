@@ -25,14 +25,13 @@ public class TaskService {
 
     public Task create(TaskRequest request) {
         String title = request.getTitle().trim();
-        title = title.replaceAll("\\s+", " ");
         if (isTitleExist(title)) {
             throw new DuplicateTitleException("Task with the " + title + " title already exists");
         }
 
         Task task = new Task(title,
                 request.getDescription().trim(),
-                request.getPriority() != null ? request.getPriority() : Priority.MEDIUM);
+                request.getPriority())  ;
 
         return taskRepository.save(task);
     }
