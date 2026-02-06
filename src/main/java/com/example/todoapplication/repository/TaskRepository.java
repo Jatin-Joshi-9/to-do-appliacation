@@ -27,4 +27,7 @@ public class  TaskRepository {
     public List<Task> findAll() {
         return new ArrayList<>(taskMapByID.values());
     }
+    public Task findById(String id) {
+        return taskMapByID.get(id);
+    }
 }

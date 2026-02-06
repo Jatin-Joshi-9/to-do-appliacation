@@ -255,6 +255,103 @@ To retrieve all tasks, send a GET request. You can use optional query parameters
 
 The endpoint returns an **empty list** when no tasks match the applied filters.
 
+---
+
+## 3. Update Task API
+
+### Test with Postman
+
+To update an existing task, send a PUT request with the task ID in the URL.
+
+#### Case 1: Successful Update
+
+First, create a task 
+- Open Postman.
+- Create a new request.
+- Method: PUT
+- URL: `http://localhost:8080/v1/api/tasks/{task-id}`
+  - Replace `{task-id}` with the actual UUID of the task you want to update
+- Body: raw `JSON` and paste the payload.
+
+**Request Body:**
+
+```json
+{
+    "title": "Updated Project Report",
+    "description": "Finish and submit the quarterly project report with new requirements",
+    "priority": "MEDIUM",
+    "status": "IN_PROGRESS"
+}
+```
+
+**Expected Success Response (200 OK):**
+
+```json
+{
+    "id": "<same-uuid>",
+    "title": "Updated Project Report",
+    "description": "Finish and submit the quarterly project report with new requirements",
+    "status": "IN_PROGRESS",
+    "priority": "MEDIUM",
+    "createdAt": "2026-02-04T10:30:00",
+    "updatedAt": "2026-02-05T14:20:00"
+}
+```
+
+**Note:** The `updatedAt` timestamp is automatically updated to reflect the modification time.
+
+#### Case 2: Update Only Title and Description
+
+You can update specific fields while keeping others unchanged:
+
+- URL: `http://localhost:8080/v1/api/tasks/{task-id}`
+
+**Request Body:**
+
+```json
+{
+    "title": "Review and Merge Code",
+    "description": "Review all pending pull requests and merge approved ones",
+    "priority": "HIGH"
+}
+```
+
+**Expected Response (200 OK):**
+
+The task will be updated with the new title, description, and priority. If status is not provided, it remains unchanged from the existing value.
+
+#### Case 3: Change Status
+
+To mark a task as completed:
+
+- URL: `http://localhost:8080/v1/api/tasks/{task-id}`
+
+**Request Body:**
+
+```json
+{
+    "title": "Complete Documentation",
+    "description": "Finalize all API documentation",
+    "priority": "LOW",
+    "status": "COMPLETED"
+}
+```
+
+**Expected Response (200 OK):**
+
+```json
+{
+    "id": "<task-uuid>",
+    "title": "Complete Documentation",
+    "description": "Finalize all API documentation",
+    "status": "COMPLETED",
+    "priority": "LOW",
+    "createdAt": "2026-02-04T09:00:00",
+    "updatedAt": "2026-02-05T16:45:00"
+}
+```
+
+
 
 
 
