@@ -41,6 +41,10 @@ public class TaskController {
             @RequestParam(required = false) Priority priority) {
         return taskService.getAllTasks(status, priority);
     }
+    @GetMapping("/{id}")
+    public Task getTaskById(@PathVariable String id) {
+        return taskService.getTaskById(id);
+    }
 
     @PatchMapping("/{id}")
     public Task update(@PathVariable String id, @RequestBody TaskRequest request) {
