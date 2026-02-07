@@ -17,6 +17,7 @@ public class ValidationService {
             Status.valueOf(status.toUpperCase());
             return true;
         } catch (IllegalArgumentException e) {
+             // invalid enum value
             return false;
         }
     }
@@ -28,6 +29,7 @@ public class ValidationService {
             Priority.valueOf(priority.toUpperCase());
             return true;
         } catch (IllegalArgumentException e) {
+             // invalid enum value
             return false;
         }
     }
