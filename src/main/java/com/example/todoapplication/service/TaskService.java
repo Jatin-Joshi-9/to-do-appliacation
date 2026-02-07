@@ -31,7 +31,8 @@ public class TaskService {
 
         Task task = new Task(title,
                 request.getDescription().trim(),
-                request.getPriority(), request.getStatus());
+                request.getPriority(),
+                request.getStatus());
 
         return taskRepository.save(task);
     }
@@ -71,19 +72,13 @@ public class TaskService {
         }
 
         if (request.getStatus() != null) {
-            Status statusEnum = request.getStatus();
-            if (statusEnum != null) {
-                existingTask.setStatus(statusEnum);
-                updated = true;
-            }
+            existingTask.setStatus(request.getStatus());
+            updated = true;
         }
 
         if (request.getPriority() != null) {
-            Priority priorityEnum = request.getPriority();
-            if (priorityEnum != null) {
-                existingTask.setPriority(priorityEnum);
-                updated = true;
-            }
+            existingTask.setPriority(request.getPriority());
+            updated = true;
         }
 
         if (ValidationService.isValidTitle(request.getTitle())) {
