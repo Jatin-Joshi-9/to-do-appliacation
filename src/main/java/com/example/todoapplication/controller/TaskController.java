@@ -41,10 +41,19 @@ public class TaskController {
             @RequestParam(required = false) Priority priority) {
         return taskService.getAllTasks(status, priority);
     }
+    @GetMapping("/{id}")
+    public Task getTaskById(@PathVariable String id) {
+        return taskService.getTaskById(id);
+    }
 
     @PatchMapping("/{id}")
     public Task update(@PathVariable String id, @RequestBody TaskRequest request) {
         return taskService.update(id, request);
+    }
+        @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTask(@PathVariable String id) {
+        taskService.deleteTask(id);
     }
 
     @ExceptionHandler(value = DuplicateTitleException.class)

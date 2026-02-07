@@ -10,8 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class  TaskRepository {
+public class TaskRepository {
     private final Map<String, Task> taskMapByID = new HashMap<>();
+
     public Task save(Task task) {
         taskMapByID.put(task.getId(), task);
         return task;
@@ -19,14 +20,24 @@ public class  TaskRepository {
 
     public boolean isExistsByTitle(String title) {
         title = title.trim();
-        title= title.replaceAll("\\s+", " ");
         String finalTitle = title;
         return taskMapByID.values().stream()
                 .anyMatch(task -> task.getTitle().equalsIgnoreCase(finalTitle));
     }
+
+    public boolean isExistsById(String id) {
+        return taskMapByID.containsKey(id);
+
+    }
+
+    public void deleteById(String id) {
+        taskMapByID.remove(id);
+    }
+
     public List<Task> findAll() {
         return new ArrayList<>(taskMapByID.values());
     }
+
     public Task findById(String id) {
         return taskMapByID.get(id);
     }
