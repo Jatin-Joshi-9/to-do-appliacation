@@ -31,7 +31,7 @@ public class TaskService {
 
         Task task = new Task(title,
                 request.getDescription().trim(),
-                request.getPriority())  ;
+                request.getPriority(), request.getStatus());
 
         return taskRepository.save(task);
     }
@@ -51,46 +51,57 @@ public class TaskService {
         return task;
     }
 
+    public void deleteTask(String id) {
+        if (!taskRepository.isExistsById(id)) {
+            throw new TaskIdNotExistException("Task with id " + id + " does not exist");
+        }
+        taskRepository.deleteById(id);
+    }
+
     public Task update(String id, TaskRequest request) {
         Task existingTask = getTaskById(id);
         boolean updated = false;
 
-        if(ValidationService.isValidDescription(request.getDescription())) {
+        if (ValidationService.isValidDescription(request.getDescription())) {
             String newDesc = request.getDescription().trim();
-            if(!newDesc.equalsIgnoreCase(existingTask.getDescription())) {
+            if (!newDesc.equalsIgnoreCase(existingTask.getDescription())) {
                 existingTask.setDescription(newDesc);
                 updated = true;
             }
         }
 
-        if(ValidationService.isValidPriority(request.getPriority())
-                && !request.getPriority().equals(existingTask.getPriority())) {
-            existingTask.setPriority(request.getPriority());
-            updated = true;
+        if (request.getStatus() != null) {
+            Status statusEnum = request.getStatus();
+            if (statusEnum != null) {
+                existingTask.setStatus(statusEnum);
+                updated = true;
+            }
         }
 
-        if(ValidationService.isValidStatus(request.getStatus())
-                && !request.getStatus().equals(existingTask.getStatus())) {
-            existingTask.setStatus(request.getStatus());
-            updated = true;
+        if (request.getPriority() != null) {
+            Priority priorityEnum = request.getPriority();
+            if (priorityEnum != null) {
+                existingTask.setPriority(priorityEnum);
+                updated = true;
+            }
         }
 
-        if(ValidationService.isValidTitle(request.getTitle())) {
-            String newTitle = request.getTitle().trim().replaceAll("\\s+", " ");
+        if (ValidationService.isValidTitle(request.getTitle())) {
+            String newTitle = request.getTitle().trim();
 
-            if(!newTitle.equalsIgnoreCase(existingTask.getTitle())&&isTitleExist(newTitle)) {
+            if (!newTitle.equalsIgnoreCase(existingTask.getTitle()) && isTitleExist(newTitle)) {
 
                 throw new DuplicateTitleException(
                         "Task with the " + newTitle + " title already exists");
             }
 
-            if(!newTitle.equalsIgnoreCase(existingTask.getTitle())) {
+            if (!newTitle.equalsIgnoreCase(existingTask.getTitle())) {
                 existingTask.setTitle(newTitle);
                 updated = true;
             }
         }
 
-        if(updated) {
+        if (updated) {
             existingTask.setUpdatedAt();
             return taskRepository.save(existingTask);
         }
