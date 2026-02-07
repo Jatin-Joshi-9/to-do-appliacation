@@ -50,6 +50,11 @@ public class TaskController {
     public Task update(@PathVariable String id, @RequestBody TaskRequest request) {
         return taskService.update(id, request);
     }
+        @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTask(@PathVariable String id) {
+        taskService.deleteTask(id);
+    }
 
     @ExceptionHandler(value = DuplicateTitleException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
