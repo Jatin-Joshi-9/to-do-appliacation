@@ -26,20 +26,10 @@ public class TaskRequest {
         return description;
     }
     public Status getStatus() {
-       if (status == null) return null;
-        try {
-            return Status.valueOf(status.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
+       return status == null ? null : Status.valueOf(status.toUpperCase());
     }
     public Priority getPriority() {
-        if (priority == null) return null;
-        try {
-            return Priority.valueOf(priority.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
+        return priority == null ? null : Priority.valueOf(priority.toUpperCase());
     }
 
 }
