@@ -14,12 +14,12 @@ public class Task {
     private LocalDateTime updatedAt;
 
 
-    public Task(String title, String description, Priority priority) {
+    public Task(String title, String description, Priority priority, Status status) {
         this.id = UUID.randomUUID().toString();
         this.title = title;
         this.description = description;
         this.priority = priority;
-        this.status = Status.PENDING;
+        this.status = status;
         LocalDateTime currentTime = LocalDateTime.now();
         this.createdAt = currentTime;
         this.updatedAt =   currentTime;
