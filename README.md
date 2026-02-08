@@ -60,22 +60,22 @@ Retrieve all tasks with optional filtering capabilities.
 
 ### 3. Get Single Task API
 Retrieve a specific task by its unique identifier.
-**Retrieve by UUID:** Fetch a single task using its unique ID.
-**Error Handling:** Returns 404 Not Found if the task doesn't exist.
-**Complete Task Details:** Returns all task information including title, description, status, priority, and timestamps.
+- **Retrieve by UUID:** Fetch a single task using its unique ID.
+- **Error Handling:** Returns 404 Not Found if the task doesn't exist.
+- **Complete Task Details:** Returns all task information including title, description, status, priority, and timestamps.
 
 ### 4. Update Task API
 Modify existing tasks with flexible update options.
-**Partial Updates:** Update only the fields you need to change.
-**Automatic Timestamp Update:** The updatedAt field is automatically updated on every modification.
-**Field Validation:** Ensures updated fields meet all validation requirements.
-**Case-Insensitive Input:** Status and priority can be provided in any case format.
+- **Partial Updates:** Update only the fields you need to change.
+- **Automatic Timestamp Update:** The updatedAt field is automatically updated on every modification.
+- **Field Validation:** Ensures updated fields meet all validation requirements.
+- **Case-Insensitive Input:** Status and priority can be provided in any case format.
 
 ### 5. Delete Task API
 Remove tasks from the system permanently.
-**Delete by UUID:** Remove a task using its unique identifier.
-**Success Response:** Returns 204 No Content when deletion is successful.
-**Error Handling:** Returns 404 Not Found if the task doesn't exist.
+- **Delete by UUID:** Remove a task using its unique identifier.
+- **Success Response:** Returns 204 No Content when deletion is successful.
+- **Error Handling:** Returns 404 Not Found if the task doesn't exist.
 
 
 ### Run the Application
