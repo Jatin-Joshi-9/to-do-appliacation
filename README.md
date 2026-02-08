@@ -48,6 +48,7 @@ Allows users to create new tasks with strict validation rules.
 - **Default Status:** New tasks are set to `PENDING` by default.
 - **Duplicate Prevention:** The system checks if a task with the same title already exists before saving.
 - **Input Validation:** Ensures titles and descriptions meet length requirements.
+- **Case-Insensitive Input:** Status and priority values can be entered in any case format (e.g., pending, PENDING, Pending all will work).
 
 ### 2. List All Tasks API
 Retrieve all tasks with optional filtering capabilities.
@@ -57,8 +58,25 @@ Retrieve all tasks with optional filtering capabilities.
 - **Combined Filtering:** Apply both status and priority filters simultaneously for precise results.
 - **Empty Response Handling:** Returns an empty list if no tasks match the specified criteria.
 
+### 3. Get Single Task API
+Retrieve a specific task by its unique identifier.
+**Retrieve by UUID:** Fetch a single task using its unique ID.
+**Error Handling:** Returns 404 Not Found if the task doesn't exist.
+**Complete Task Details:** Returns all task information including title, description, status, priority, and timestamps.
 
--**Note**: The status and priority filtering is case-sensitive.
+### 4. Update Task API
+Modify existing tasks with flexible update options.
+**Partial Updates:** Update only the fields you need to change.
+**Automatic Timestamp Update:** The updatedAt field is automatically updated on every modification.
+**Field Validation:** Ensures updated fields meet all validation requirements.
+**Case-Insensitive Input:** Status and priority can be provided in any case format.
+
+### 5. Delete Task API
+Remove tasks from the system permanently.
+**Delete by UUID:** Remove a task using its unique identifier.
+**Success Response:** Returns 204 No Content when deletion is successful.
+**Error Handling:** Returns 404 Not Found if the task doesn't exist.
+
 
 ### Run the Application
 You need to get the code and start the backend server first , should have java installed, with maven. 
@@ -80,19 +98,24 @@ mvn spring-boot:run
 
 Success: You will see Started TodoApplication in ... seconds in your terminal. The server is now running at http://localhost:8080.
 
+
 ### Test with Postman
+
+## 1. Create Task API
+
 To create a task, send a POST request with the JSON payload shown below.
 
 - Open Postman.
 - Create a new request.
 - Method: POST
-- URL: `http://localhost:8080/v1/api/tasks/`
+- URL: `http://localhost:8080/v1/api/tasks`
 - Body: raw `JSON` and paste the payload.
 
 ```
 {
     "title": " Enter custom Title ",
     "description": "Enter custom Description ",
+    "status": "PENDING"
     "priority": "enter custom Priority (LOW, MEDIUM, HIGH)"
 }
 ```
@@ -107,7 +130,7 @@ Expected Success Response \(200 OK\):
     "title": "your custom Title",
     "description": "your custom Description",
     "status": "PENDING",
-    "priority": "your custom Priority",
+    "priority": "High",
     "createdAt": "current-timestamp",
     "updatedAt": "current-timestamp"
 }
@@ -350,6 +373,93 @@ To mark a task as completed:
     "updatedAt": "2026-02-05T16:45:00"
 }
 ```
+=================================================================
+## 4. Get Single Task API
+
+### Test with Postman
+
+To retrieve a specific task by its ID, send a GET request with the task UUID in the URL.
+
+#### Case 1: Successful Retrieval
+
+- Open Postman.
+- Create a new request.
+- Method: GET
+- URL: `http://localhost:8080/v1/api/tasks/{task-id}`
+  - Replace `{task-id}` with the actual UUID of the task you want to retrieve
+
+**Expected Success Response (200 OK):**
+
+```json
+{
+    "id": "<task-uuid>",
+    "title": "Complete Project Report",
+    "description": "Finish and submit the quarterly project report",
+    "status": "PENDING",
+    "priority": "HIGH",
+    "createdAt": "2026-02-04T10:30:00",
+    "updatedAt": "2026-02-04T10:30:00"
+}
+```
+
+#### Case 2: Task Not Found
+
+- URL: `http://localhost:8080/v1/api/tasks/{invalid-task-id}`
+
+**Expected Response (404 Not Found):**
+
+The endpoint returns a `404 Not Found` error when the specified task ID doesn't exist in the system.
+
+---
+
+## 4. Delete Task API
+
+### Test with Postman
+
+To delete a task, send a DELETE request with the task ID in the URL.
+
+#### Case 1: Successful Deletion
+
+- Open Postman.
+- Create a new request.
+- Method: DELETE
+- URL: `http://localhost:8080/v1/api/tasks/{task-id}`
+  - Replace `{task-id}` with the actual UUID of the task you want to delete
+
+**Expected Success Response (204 No Content):**
+
+The endpoint returns `204 No Content` when the task is successfully deleted. No response body is returned.
+
+#### Case 2: Task Not Found
+
+- URL: `http://localhost:8080/v1/api/tasks/{invalid-task-id}`
+
+**Expected Response (404 Not Found):**
+
+The endpoint returns a `404 Not Found` error when attempting to delete a task that doesn't exist in the system.
+
+---
+
+## API Endpoints Summary
+
+| Method | Endpoint | Description | Success Response |
+|--------|----------|-------------|------------------|
+| POST | `/v1/api/tasks` | Create a new task | 200 OK |
+| GET | `/v1/api/tasks` | Get all tasks (with optional filters) | 200 OK |
+| GET | `/v1/api/tasks/{id}` | Get a single task by ID | 200 OK |
+| PUT | `/v1/api/tasks/{id}` | Update an existing task | 200 OK |
+| DELETE | `/v1/api/tasks/{id}` | Delete a task | 204 No Content |
+
+---
+
+## Additional Notes
+
+- **Case-Insensitive Input:** All enum values (status and priority) can be entered in any case format (lowercase, uppercase, or mixed case).
+- **Input Validation:** The API validates all inputs and returns appropriate error messages for invalid data.
+- **Error Responses:** The API returns standard HTTP status codes (400 for validation errors, 404 for not found, 500 for server errors).
+- **In-Memory Storage:** All data is stored in memory and will be lost when the server is restarted.
+
+
 
 
 
