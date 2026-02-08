@@ -14,20 +14,22 @@ public class TaskRequest {
     @NotBlank(message = "Description is required")
     private String description;
 
-   private String status;
+    private String status;
 
-   
     private String priority;
 
     public String getTitle() {
         return title;
     }
+
     public String getDescription() {
         return description;
     }
+
     public Status getStatus() {
-       return status == null ? null : Status.valueOf(status.toUpperCase());
+        return status == null ? null : Status.valueOf(status.toUpperCase());
     }
+
     public Priority getPriority() {
         return priority == null ? null : Priority.valueOf(priority.toUpperCase());
     }
