@@ -3,7 +3,6 @@ package com.example.todoapplication.dto;
 import com.example.todoapplication.model.Priority;
 import com.example.todoapplication.model.Status;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class TaskRequest {
@@ -15,22 +14,24 @@ public class TaskRequest {
     @NotBlank(message = "Description is required")
     private String description;
 
-    private Status status;
+    private String status;
 
-    @NotNull(message = "Priority is required")
-    private Priority priority;
+    private String priority;
 
     public String getTitle() {
         return title;
     }
+
     public String getDescription() {
         return description;
     }
+
     public Status getStatus() {
-        return status;
+        return status == null ? null : Status.valueOf(status.toUpperCase());
     }
+
     public Priority getPriority() {
-        return priority;
+        return priority == null ? null : Priority.valueOf(priority.toUpperCase());
     }
 
 }
