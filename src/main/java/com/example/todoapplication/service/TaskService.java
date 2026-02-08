@@ -8,7 +8,11 @@ import com.example.todoapplication.model.Status;
 import com.example.todoapplication.model.Task;
 import com.example.todoapplication.repository.TaskRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -102,5 +106,42 @@ public class TaskService {
         }
         return existingTask;
     }
+
+
+    public List<Task> createBulk(List<TaskRequest> requests) {
+    
+    //checking for duplicates in the request itself
+    Set<String> titlesInRequest = new HashSet<>();
+    for (TaskRequest request : requests) {
+        String title = request.getTitle().trim().toLowerCase();
+        
+        if (titlesInRequest.contains(title)) {
+            throw new DuplicateTitleException(
+                "Duplicate title " + request.getTitle() + " found in bulk request"
+            );
+        }
+        titlesInRequest.add(title);
+    }
+    
+    // checking for duplicates against existing tasks
+    for (TaskRequest request : requests) {
+        String title = request.getTitle().trim();
+        
+        if (isTitleExist(title)) {
+            throw new DuplicateTitleException(
+                "Task title " + title + " already exists"
+            );
+        }
+    }
+    
+    // creating all tasks
+    List<Task> createdTasks = new ArrayList<>();
+    for (TaskRequest request : requests) {
+        Task task = create(request);
+        createdTasks.add(task);
+    }
+    
+    return createdTasks;
+}
 
 }
