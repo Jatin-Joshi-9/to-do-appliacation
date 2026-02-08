@@ -373,7 +373,7 @@ To mark a task as completed:
     "updatedAt": "2026-02-05T16:45:00"
 }
 ```
-=================================================================
+
 ## 4. Get Single Task API
 
 ### Test with Postman
