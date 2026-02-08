@@ -1,5 +1,6 @@
 package com.example.todoapplication.controller;
 
+import com.example.todoapplication.dto.BulkTaskRequest;
 import com.example.todoapplication.dto.TaskRequest;
 import com.example.todoapplication.exception.DuplicateTitleException;
 import com.example.todoapplication.exception.TaskIdNotExistException;
@@ -54,6 +55,11 @@ public class TaskController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTask(@PathVariable String id) {
         taskService.deleteTask(id);
+    }
+        @PostMapping("/bulk")
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<Task> createBulk(@Valid @RequestBody BulkTaskRequest request) {
+        return taskService.createBulk(request.getTasks());
     }
 
     @ExceptionHandler(value = DuplicateTitleException.class)
