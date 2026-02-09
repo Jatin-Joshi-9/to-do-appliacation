@@ -1,44 +1,19 @@
 package com.example.todoapplication.repository;
 
 import com.example.todoapplication.model.Task;
-
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.context.annotation.Primary;
+import java.util.Optional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+@Primary
 @Repository
-public class TaskRepository {
-    private final Map<String, Task> taskMapByID = new HashMap<>();
-
-    public Task save(Task task) {
-        taskMapByID.put(task.getId(), task);
-        return task;
-    }
-
-    public boolean isExistsByTitle(String title) {
-        title = title.trim();
-        String finalTitle = title;
-        return taskMapByID.values().stream()
-                .anyMatch(task -> task.getTitle().equalsIgnoreCase(finalTitle));
-    }
-
-    public boolean isExistsById(String id) {
-        return taskMapByID.containsKey(id);
-
-    }
-
-    public void deleteById(String id) {
-        taskMapByID.remove(id);
-    }
-
-    public List<Task> findAll() {
-        return new ArrayList<>(taskMapByID.values());
-    }
-
-    public Task findById(String id) {
-        return taskMapByID.get(id);
-    }
+public interface TaskRepository extends JpaRepository<Task, String> {
+    
+    // Check if task exists by title (case-insensitive)
+    boolean existsByTitleIgnoreCase(String title);
+    
+    // Find task by title (case-insensitive)
+    Optional<Task> findByTitleIgnoreCase(String title);
 }
