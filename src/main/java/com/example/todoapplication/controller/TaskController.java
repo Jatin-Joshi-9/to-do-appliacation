@@ -2,9 +2,6 @@ package com.example.todoapplication.controller;
 
 import com.example.todoapplication.dto.TaskRequest;
 import com.example.todoapplication.exception.DuplicateTitleException;
-import com.example.todoapplication.exception.TaskIdNotExistException;
-import com.example.todoapplication.model.Priority;
-import com.example.todoapplication.model.Status;
 import com.example.todoapplication.model.Task;
 import com.example.todoapplication.service.TaskService;
 import jakarta.validation.Valid;
@@ -35,26 +32,12 @@ public class TaskController {
         return taskService.create(request);
     }
 
-    @GetMapping
-    public List<Task> getAllTasks(
-            @RequestParam(required = false) Status status,
-            @RequestParam(required = false) Priority priority) {
-        return taskService.getAllTasks(status, priority);
-    }
-    @GetMapping("/{id}")
-    public Task getTaskById(@PathVariable String id) {
-        return taskService.getTaskById(id);
+    @PostMapping("/bulk")
+    @ResponseStatus(HttpStatus.CREATED)
+    public List<Task> createBulk(@Valid @RequestBody List<TaskRequest> requests) {
+        return taskService.createBulk(requests);
     }
 
-    @PatchMapping("/{id}")
-    public Task update(@PathVariable String id, @RequestBody TaskRequest request) {
-        return taskService.update(id, request);
-    }
-        @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTask(@PathVariable String id) {
-        taskService.deleteTask(id);
-    }
 
     @ExceptionHandler(value = DuplicateTitleException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
@@ -65,21 +48,13 @@ public class TaskController {
         response.put("details", Map.of());
         return response;
     }
+
     @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public Map<String, Object> handleMethodNotAllowedException(HttpRequestMethodNotSupportedException exception) {
         Map<String, Object> response = new HashMap<>();
         response.put("status", HttpStatus.METHOD_NOT_ALLOWED.value());
         response.put("message", "Method not allowed");
-        response.put("details", Map.of());
-        return response;
-    }
-    @ExceptionHandler(value = TaskIdNotExistException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, Object> handleGenericException(TaskIdNotExistException exception) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", HttpStatus.NOT_FOUND.value());
-        response.put("message", exception.getMessage());
         response.put("details", Map.of());
         return response;
     }
@@ -93,8 +68,6 @@ public class TaskController {
         response.put("details", Map.of());
         return response;
     }
-
-
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
