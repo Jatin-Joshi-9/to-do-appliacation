@@ -42,6 +42,7 @@ public class TaskController {
             @RequestParam(required = false) Priority priority) {
         return taskService.getAllTasks(status, priority);
     }
+
     @GetMapping("/{id}")
     public Task getTaskById(@PathVariable String id) {
         return taskService.getTaskById(id);
@@ -51,12 +52,14 @@ public class TaskController {
     public Task update(@PathVariable String id, @RequestBody TaskRequest request) {
         return taskService.update(id, request);
     }
-        @DeleteMapping("/{id}")
+
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTask(@PathVariable String id) {
         taskService.deleteTask(id);
     }
-        @PostMapping("/bulk")
+
+    @PostMapping("/bulk")
     @ResponseStatus(HttpStatus.CREATED)
     public List<Task> createBulk(@Valid @RequestBody BulkTaskRequest request) {
         return taskService.createBulk(request.getTasks());
@@ -71,6 +74,7 @@ public class TaskController {
         response.put("details", Map.of());
         return response;
     }
+
     @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public Map<String, Object> handleMethodNotAllowedException(HttpRequestMethodNotSupportedException exception) {
@@ -80,6 +84,7 @@ public class TaskController {
         response.put("details", Map.of());
         return response;
     }
+
     @ExceptionHandler(value = TaskIdNotExistException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, Object> handleGenericException(TaskIdNotExistException exception) {
@@ -99,8 +104,6 @@ public class TaskController {
         response.put("details", Map.of());
         return response;
     }
-
-
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
