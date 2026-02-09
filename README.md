@@ -20,7 +20,7 @@ Each task must include:
 ### API requirements
 - Create Task
     - Validate input
-    - Prevent duplicate titles (case-insensitive)
+    - Prevent duplicate titles
 - List All Tasks
     - Support optional filtering by `status` and/or `priority`
 - Get Single Task
@@ -50,7 +50,17 @@ Allows users to create new tasks with strict validation rules.
 - **Input Validation:** Ensures titles and descriptions meet length requirements.
 - **Case-Insensitive Input:** Status and priority values can be entered in any case format (e.g., pending, PENDING, Pending all will work).
 
-### 2. List All Tasks API
+### 2. Create Multiple Tasks API (Bulk Creation)
+Create multiple tasks in a single API request for improved efficiency.
+
+- **Bulk Creation:** Submit multiple tasks in one request to reduce API calls.
+- **All-or-Nothing:** Either all tasks are created successfully, or none are created (prevents partial creation).
+- **Duplicate Prevention:** Checks for duplicate titles both within the request and against existing tasks.
+- **Batch Validation:** Validates all tasks before creating any of them.
+- **Clear Error Messages:** Returns specific errors if duplicates or validation failures are found.
+- **Consistent Behavior:** Follows the same validation rules as single task creation.
+
+### 3. List All Tasks API
 Retrieve all tasks with optional filtering capabilities.
 - **Retrieve All Tasks:** Fetch the complete list of tasks stored in the system.
 - **Filter by Status:** Optionally filter tasks by their status (`PENDING`, `IN_PROGRESS`, `COMPLETED`).
@@ -58,20 +68,20 @@ Retrieve all tasks with optional filtering capabilities.
 - **Combined Filtering:** Apply both status and priority filters simultaneously for precise results.
 - **Empty Response Handling:** Returns an empty list if no tasks match the specified criteria.
 
-### 3. Get Single Task API
+### 4. Get Single Task API
 Retrieve a specific task by its unique identifier.
 - **Retrieve by UUID:** Fetch a single task using its unique ID.
 - **Error Handling:** Returns 404 Not Found if the task doesn't exist.
 - **Complete Task Details:** Returns all task information including title, description, status, priority, and timestamps.
 
-### 4. Update Task API
+### 5. Update Task API
 Modify existing tasks with flexible update options.
 - **Partial Updates:** Update only the fields you need to change.
 - **Automatic Timestamp Update:** The updatedAt field is automatically updated on every modification.
 - **Field Validation:** Ensures updated fields meet all validation requirements.
 - **Case-Insensitive Input:** Status and priority can be provided in any case format.
 
-### 5. Delete Task API
+### 6. Delete Task API
 Remove tasks from the system permanently.
 - **Delete by UUID:** Remove a task using its unique identifier.
 - **Success Response:** Returns 204 No Content when deletion is successful.
@@ -159,7 +169,145 @@ Send empty title:
 ```
 Result: 400 Bad Request
 
-## 2. List All Tasks API
+## 2. Create Multiple Tasks API (Bulk)
+
+Create multiple tasks in a single API request for improved efficiency.
+
+- Open Postman.
+- Create a new request.
+- Method: **POST**
+- URL: `http://localhost:8080/v1/api/tasks/bulk`
+- Body: **raw** `JSON` and paste the payload.
+
+**Request Body:**
+
+```json
+{
+    "tasks": [
+        {
+            "title": "Buy groceries",
+            "description": "Milk, bread, eggs",
+            "priority": "HIGH"
+        },
+        {
+            "title": "Call dentist",
+            "description": "Schedule appointment",
+            "priority": "MEDIUM"
+        },
+        {
+            "title": "Review code",
+            "description": "Review pull requests",
+            "priority": "LOW"
+        }
+    ]
+}
+```
+
+**Expected Success Response (201 Created):**
+
+```json
+[
+    {
+        "id": "abc-123",
+        "title": "Buy groceries",
+        "description": "Milk, bread, eggs",
+        "status": "PENDING",
+        "priority": "HIGH",
+        "createdAt": "2026-02-08T10:00:00",
+        "updatedAt": "2026-02-08T10:00:00"
+    },
+    {
+        "id": "def-456",
+        "title": "Call dentist",
+        "description": "Schedule appointment",
+        "status": "PENDING",
+        "priority": "MEDIUM",
+        "createdAt": "2026-02-08T10:00:01",
+        "updatedAt": "2026-02-08T10:00:01"
+    },
+    {
+        "id": "ghi-789",
+        "title": "Review code",
+        "description": "Review pull requests",
+        "status": "PENDING",
+        "priority": "LOW",
+        "createdAt": "2026-02-08T10:00:02",
+        "updatedAt": "2026-02-08T10:00:02"
+    }
+]
+```
+
+**Expected Failures:**
+
+**Duplicate Title Within Request:**
+```json
+{
+    "tasks": [
+        {
+            "title": "Buy groceries",
+            "description": "First task",
+            "priority": "HIGH"
+        },
+        {
+            "title": "Buy groceries",
+            "description": "Duplicate task",
+            "priority": "LOW"
+        }
+    ]
+}
+```
+- Result: `409 Conflict`
+- Response:
+```json
+{
+    "status": 409,
+    "message": "Duplicate title 'Buy groceries' found in bulk request",
+    "details": {}
+}
+```
+
+**Duplicate Title in Existing Tasks:**
+- If "Buy groceries" already exists in the system
+- Result: `409 Conflict`
+
+**Empty Task List:**
+```json
+{
+    "tasks": []
+}
+```
+- Result: `400 Bad Request`
+
+**Invalid Task Data:**
+```json
+{
+    "tasks": [
+        {
+            "title": "",
+            "description": "Missing title",
+            "priority": "HIGH"
+        }
+    ]
+}
+```
+- Result: `400 Bad Request`
+
+**Validation Rules:**
+1. Tasks list cannot be empty
+2. Each task must pass individual validation
+3. No duplicate titles within the same request
+4. No duplicate titles compared to existing tasks
+5. If any validation fails, no tasks are created
+
+**Benefits:**
+- Reduces API calls when creating multiple tasks
+- Improves user experience for bulk operations
+- Maintains data integrity with duplicate checks
+- Consistent error handling with existing endpoints
+
+---
+
+## 3. List All Tasks API
 
 ### Test with Postman
 
@@ -280,7 +428,7 @@ The endpoint returns an **empty list** when no tasks match the applied filters.
 
 ---
 
-## 3. Update Task API
+## 4. Update Task API
 
 ### Test with Postman
 
@@ -374,7 +522,7 @@ To mark a task as completed:
 }
 ```
 
-## 4. Get Single Task API
+## 5. Get Single Task API
 
 ### Test with Postman
 
@@ -442,13 +590,15 @@ The endpoint returns a `404 Not Found` error when attempting to delete a task th
 
 ## API Endpoints Summary
 
-| Method | Endpoint | Description | Success Response |
+|  Method | Endpoint | Description | Success Response |
 |--------|----------|-------------|------------------|
 | POST | `/v1/api/tasks` | Create a new task | 200 OK |
+| POST | `/v1/api/tasks/bulk` | Create multiple tasks | 201 Created |
 | GET | `/v1/api/tasks` | Get all tasks (with optional filters) | 200 OK |
 | GET | `/v1/api/tasks/{id}` | Get a single task by ID | 200 OK |
 | PUT | `/v1/api/tasks/{id}` | Update an existing task | 200 OK |
 | DELETE | `/v1/api/tasks/{id}` | Delete a task | 204 No Content |
+
 
 ---
 
@@ -458,6 +608,7 @@ The endpoint returns a `404 Not Found` error when attempting to delete a task th
 - **Input Validation:** The API validates all inputs and returns appropriate error messages for invalid data.
 - **Error Responses:** The API returns standard HTTP status codes (400 for validation errors, 404 for not found, 500 for server errors).
 - **In-Memory Storage:** All data is stored in memory and will be lost when the server is restarted.
+- **Bulk Operations:** The bulk creation endpoint uses an all-or-nothing approach to ensure data consistency.
 
 
 
